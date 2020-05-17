@@ -22,15 +22,15 @@ import java.sql.Timestamp;
 @Data
 public abstract class AuditModel {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @Column(name = "created_at", nullable = false, updatable = false)
-    @CreationTimestamp
-    private Timestamp createdAt;
+  @Column(name = "created_at", nullable = false, updatable = false)
+  @CreationTimestamp
+  private Timestamp createdAt;
 
-    @Column(name = "updated_at", nullable = false)
-    @UpdateTimestamp
-    private Timestamp updatedAt;
+  @Column(name = "updated_at", nullable = false)
+  @UpdateTimestamp
+  private Timestamp updatedAt;
 }

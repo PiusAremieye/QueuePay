@@ -19,15 +19,15 @@ import java.util.UUID;
 @Data
 public class BankAccount extends AuditModel {
 
-    @NotNull
-    @NotBlank
-    private String bankName;
+  @NotNull
+  @NotBlank
+  private String bankName;
 
-    @NotNull
-    @NotBlank
-    private String accountNumber;
+  @NotNull
+  @NotBlank
+  private String accountNumber;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "businessId", nullable = false)
-    private Business business;
+  @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @JoinColumn(name = "businessId", nullable = false)
+  private Business business;
 }

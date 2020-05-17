@@ -19,27 +19,27 @@ import javax.validation.Valid;
 @RequestMapping("/users")
 @CrossOrigin
 public class UserController {
-    private UserService userService;
-    private MapValidationErrorService mapValidationErrorService;
+  private UserService userService;
+  private MapValidationErrorService mapValidationErrorService;
 
-    @Autowired
-    public UserController(UserService userService, MapValidationErrorService mapValidationErrorService) {
-        this.userService = userService;
-        this.mapValidationErrorService = mapValidationErrorService;
-    }
+  @Autowired
+  public UserController(UserService userService, MapValidationErrorService mapValidationErrorService) {
+    this.userService = userService;
+    this.mapValidationErrorService = mapValidationErrorService;
+  }
 
-    @PostMapping("/register")
-    public ResponseEntity<?> signUp(@RequestBody @Valid SignupRequest signupRequest, BindingResult bindingResult) throws Exception {
-        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
-        if (errorMap != null){
-            return errorMap;
-        }
-        User createdUser = userService.registration(signupRequest);
-        ApiResponse<User> response = new ApiResponse<>(HttpStatus.CREATED);
-        response.setData(createdUser);
-        response.setMessage("Registration successful!");
-        return new ResponseEntity<>(response, response.getStatus());
+  @PostMapping("/register")
+  public ResponseEntity<?> signUp(@RequestBody @Valid SignupRequest signupRequest, BindingResult bindingResult) throws Exception {
+    ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
+    if (errorMap != null){
+      return errorMap;
     }
+    User createdUser = userService.registration(signupRequest);
+    ApiResponse<User> response = new ApiResponse<>(HttpStatus.CREATED);
+    response.setData(createdUser);
+    response.setMessage("Registration successful!");
+    return new ResponseEntity<>(response, response.getStatus());
+  }
 
 //    @PatchMapping("verifyEmail/{token}")
 //    public ResponseEntity<Response<String>> verifyRegistration(@PathVariable String token) throws Exception {
@@ -49,17 +49,17 @@ public class UserController {
 //        return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
 //    }
 
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody @Valid LoginRequest loginRequest, BindingResult bindingResult) throws Exception {
-        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
-        if (errorMap != null){
-            return errorMap;
-        }
-        JwtResponse loginResponse = userService.authenticate(loginRequest);
-        ApiResponse<JwtResponse> response = new ApiResponse<>(HttpStatus.OK);
-        response.setData(loginResponse);
-        response.setMessage("Login successful!");
-        return new ResponseEntity<>(response, response.getStatus());
+  @PostMapping("/login")
+  public ResponseEntity<?> login(@RequestBody @Valid LoginRequest loginRequest, BindingResult bindingResult) {
+    ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
+    if (errorMap != null){
+      return errorMap;
     }
+    JwtResponse loginResponse = userService.authenticate(loginRequest);
+    ApiResponse<JwtResponse> response = new ApiResponse<>(HttpStatus.OK);
+    response.setData(loginResponse);
+    response.setMessage("Login successful!");
+    return new ResponseEntity<>(response, response.getStatus());
+  }
 
 }

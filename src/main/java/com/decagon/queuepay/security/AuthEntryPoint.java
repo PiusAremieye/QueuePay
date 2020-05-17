@@ -11,9 +11,9 @@ import java.io.IOException;
 
 @Component
 public class AuthEntryPoint implements AuthenticationEntryPoint {
-    @Override
-    public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
-        e.getMessage();
-        httpServletResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Error: unauthorized");
-    }
+  @Override
+  public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
+    e.getMessage();
+    httpServletResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Error: unauthorized");
+  }
 }

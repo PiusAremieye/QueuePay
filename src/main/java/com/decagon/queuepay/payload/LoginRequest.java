@@ -3,7 +3,6 @@ package com.decagon.queuepay.payload;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import javax.validation.constraints.NotBlank;
 
 @NoArgsConstructor
@@ -11,9 +10,9 @@ import javax.validation.constraints.NotBlank;
 @Data
 public class LoginRequest {
 
-    @NotBlank(message = "Please provide your email")
-    private String username;
+  @NotBlank(message = "Please provide your email")
+  private String username;
 
-    @NotBlank(message = "Please provide your password")
-    private String password;
+  @NotBlank(message = "Please provide your password")
+  private String password;
 }

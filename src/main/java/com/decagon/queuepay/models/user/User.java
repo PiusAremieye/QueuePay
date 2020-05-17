@@ -30,53 +30,53 @@ import java.util.UUID;
 @Data
 public class User extends AuditModel implements UserDetails {
 
-    @NotBlank(message = "Please name should not be empty")
-    private String fullName;
+  @NotBlank(message = "Please name should not be empty")
+  private String fullName;
 
-    @NotBlank(message = "Please phone number should not be empty")
-    private String phoneNumber;
+  @NotBlank(message = "Please phone number should not be empty")
+  private String phoneNumber;
 
-    @Email(message = "Must be a valid email")
-    @NotBlank(message = "Please email should not be empty")
-    private String username;
+  @Email(message = "Must be a valid email")
+  @NotBlank(message = "Please email should not be empty")
+  private String username;
 
-    @NotBlank(message = "Please password should not be empty")
-    @JsonIgnoreProperties
-    private String password;
+  @NotBlank(message = "Please password should not be empty")
+  @JsonIgnoreProperties
+  private String password;
 
-    @JsonIgnore
-    private String emailVerificationToken;
+  @JsonIgnore
+  private String emailVerificationToken;
 
-    @JsonIgnore
-    private EmailVerificationStatus emailVerificationStatus = EmailVerificationStatus.UNVERIFIED;
+  @JsonIgnore
+  private EmailVerificationStatus emailVerificationStatus = EmailVerificationStatus.UNVERIFIED;
 
-    @JsonIgnore
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
-    }
+  @JsonIgnore
+  @Override
+  public Collection<? extends GrantedAuthority> getAuthorities() {
+    return null;
+  }
 
-    @JsonIgnore
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
+  @JsonIgnore
+  @Override
+  public boolean isAccountNonExpired() {
+    return true;
+  }
 
-    @JsonIgnore
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
+  @JsonIgnore
+  @Override
+  public boolean isAccountNonLocked() {
+    return true;
+  }
 
-    @JsonIgnore
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
+  @JsonIgnore
+  @Override
+  public boolean isCredentialsNonExpired() {
+    return true;
+  }
 
-    @JsonIgnore
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
+  @JsonIgnore
+  @Override
+  public boolean isEnabled() {
+    return true;
+  }
 }

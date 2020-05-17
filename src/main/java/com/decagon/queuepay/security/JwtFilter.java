@@ -22,28 +22,28 @@ import java.util.Collections;
 
 public class JwtFilter extends OncePerRequestFilter {
 
-    @Autowired
-    private JwtProvider jwtProvider;
+  @Autowired
+  private JwtProvider jwtProvider;
 
-    @Autowired
-    private MyUserDetailsService myUserDetailsService;
+  @Autowired
+  private MyUserDetailsService myUserDetailsService;
 
-    @Override
-    protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
-        String token = jwtProvider.resolveToken(httpServletRequest);
-        try{
-            if (token != null && jwtProvider.validateToken(token)){
-                String username = jwtProvider.getUsername(token);
-                User userDetails = myUserDetailsService.loadByEmail(username);
-                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                        userDetails, null, Collections.emptyList()
-                );
-                authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
-                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-            }
-        }catch (JwtException ex){
-            ex.getMessage();
-        }
-        filterChain.doFilter(httpServletRequest, httpServletResponse);
+  @Override
+  protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
+    String token = jwtProvider.resolveToken(httpServletRequest);
+    try{
+      if (token != null && jwtProvider.validateToken(token)){
+        String username = jwtProvider.getUsername(token);
+        User userDetails = myUserDetailsService.loadByEmail(username);
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+                userDetails, null, Collections.emptyList()
+        );
+        authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
+        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+      }
+    }catch (JwtException ex){
+      ex.getMessage();
     }
+    filterChain.doFilter(httpServletRequest, httpServletResponse);
+  }
 }

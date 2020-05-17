@@ -25,44 +25,44 @@ import java.util.Arrays;
 @EnableGlobalMethodSecurity(securedEnabled = true, jsr250Enabled = true, prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private MyUserDetailsService myUserDetailsService;
-    private AuthEntryPoint authEntryPoint;
+  private MyUserDetailsService myUserDetailsService;
+  private AuthEntryPoint authEntryPoint;
 
-    @Bean
-    public JwtFilter jwtFilter(){ return new JwtFilter();}
+  @Bean
+  public JwtFilter jwtFilter(){ return new JwtFilter();}
 
-    @Autowired
-    public SecurityConfig(MyUserDetailsService myUserDetailsService, AuthEntryPoint authEntryPoint){
-        this.myUserDetailsService = myUserDetailsService;
-        this.authEntryPoint = authEntryPoint;
-    }
+  @Autowired
+  public SecurityConfig(MyUserDetailsService myUserDetailsService, AuthEntryPoint authEntryPoint){
+    this.myUserDetailsService = myUserDetailsService;
+    this.authEntryPoint = authEntryPoint;
+  }
 
-    @Override
-    public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception{
-        authenticationManagerBuilder.userDetailsService(myUserDetailsService).passwordEncoder(passwordEncoder());
-    }
+  @Override
+  public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception{
+    authenticationManagerBuilder.userDetailsService(myUserDetailsService).passwordEncoder(passwordEncoder());
+  }
 
-    @Bean
-    @Override
-    public AuthenticationManager authenticationManager() throws Exception {
-        return super.authenticationManager();
-    }
+  @Bean
+  @Override
+  public AuthenticationManager authenticationManager() throws Exception {
+    return super.authenticationManager();
+  }
 
-    @Bean
-    public PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
-    }
+  @Bean
+  public PasswordEncoder passwordEncoder(){
+    return new BCryptPasswordEncoder();
+  }
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()
-                .exceptionHandling().authenticationEntryPoint(authEntryPoint)
-                .and().authorizeRequests().antMatchers("/users/**").permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        http.addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class);
-    }
+  @Override
+  protected void configure(HttpSecurity http) throws Exception {
+    http.csrf().disable()
+      .exceptionHandling().authenticationEntryPoint(authEntryPoint)
+      .and().authorizeRequests().antMatchers("/users/**").permitAll()
+      .anyRequest().authenticated()
+      .and()
+      .sessionManagement()
+      .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+    http.addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class);
+  }
 
 }

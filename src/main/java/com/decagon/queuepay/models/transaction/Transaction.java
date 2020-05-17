@@ -2,6 +2,7 @@ package com.decagon.queuepay.models.transaction;
 
 import com.decagon.queuepay.models.AuditModel;
 import com.decagon.queuepay.models.Business;
+import com.decagon.queuepay.models.user.User;
 import com.decagon.queuepay.models.wallet.Wallet;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,24 +21,28 @@ import javax.validation.constraints.NotNull;
 @Data
 public class Transaction extends AuditModel {
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "walletId", nullable = false)
-    private Wallet wallet;
+  @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+  @JoinColumn(name = "walletId", nullable = false)
+  private Wallet wallet;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "businessId", nullable = false)
-    private Business business;
+  @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+  @JoinColumn(name = "businessId", nullable = false)
+  private Business business;
 
-    private String customerName;
+  @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+  @JoinColumn(name = "userId", nullable = false)
+  private User user;
 
-    private CardType cardType;
+  private String customerName;
 
-    @NotNull
-    private Double amount;
+  private CardType cardType;
 
-    @NotNull
-    private TransactionStatus status;
+  @NotNull
+  private Double amount;
 
-    @NotNull
-    private TransactionType transactionType;
+  @NotNull
+  private TransactionStatus status;
+
+  @NotNull
+  private TransactionType transactionType;
 }

@@ -8,6 +8,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface BankAccountRepository extends JpaRepository<BankAccount, Integer> {
-    Optional<BankAccount> findById(Integer businessId);
+public interface BankAccountRepository extends JpaRepository<BankAccount, Long> {
+  Optional<BankAccount> findById(Integer businessId);
 }

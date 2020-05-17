@@ -8,13 +8,13 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 public class QueuepayApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(QueuepayApplication.class, args);
-    }
+  public static void main(String[] args) {
+    SpringApplication.run(QueuepayApplication.class, args);
+  }
 
-    @Bean
-    public ModelMapper modelMapper() {
-        return new ModelMapper();
-    }
+  @Bean
+  public ModelMapper modelMapper() {
+    return new ModelMapper();
+  }
 
 }

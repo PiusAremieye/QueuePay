@@ -15,25 +15,25 @@ import javax.transaction.Transactional;
 @Service
 public class MyUserDetailsService implements UserDetailsService {
 
-    private UserRepository userRepository;
+  private UserRepository userRepository;
 
-    @Autowired
-    public MyUserDetailsService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+  @Autowired
+  public MyUserDetailsService(UserRepository userRepository) {
+    this.userRepository = userRepository;
+  }
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByUsername(username)
-                .orElseThrow(() -> new CustomException("Email " + username + " was not found", HttpStatus.NOT_FOUND));
-    }
+  @Override
+  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    return userRepository.findByUsername(username)
+            .orElseThrow(() -> new CustomException("Email " + username + " was not found", HttpStatus.NOT_FOUND));
+  }
 
-    @Transactional
-    public User loadByEmail(String username){
-        User user = userRepository.findByUsername(username).orElse(null);
-        if (user == null){
-            throw new UsernameNotFoundException("User not found");
-        }
-        return user;
+  @Transactional
+  public User loadByEmail(String username){
+    User user = userRepository.findByUsername(username).orElse(null);
+    if (user == null){
+      throw new UsernameNotFoundException("User not found");
     }
+    return user;
+  }
 }

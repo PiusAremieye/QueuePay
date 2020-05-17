@@ -23,84 +23,84 @@ import java.util.*;
 @Component
 public class JwtProvider {
 
-    @Value("${queuepay.jwtSecretKey}")
-    private String secretKey;
+  @Value("${queuepay.jwtSecretKey}")
+  private String secretKey;
 
-    @Value("${queuepay.jwtExpirationMs}")
-    private Long validity;
+  @Value("${queuepay.jwtExpirationMs}")
+  private Long validity;
 
-    @Autowired
-    private UserRepository userRepository;
+  @Autowired
+  private UserRepository userRepository;
 
-    @Autowired
-    private MyUserDetailsService userDetailsService;
+  @Autowired
+  private MyUserDetailsService userDetailsService;
 
-    @PostConstruct
-    protected void init(){
-        secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
+  @PostConstruct
+  protected void init(){
+    secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
+  }
+
+  protected String generateToken(String subject, Long validityPeriod) {
+    Claims claims = Jwts.claims().setSubject(subject);
+    Date now = new Date();
+    Date validity = new Date(now.getTime() + validityPeriod);
+
+    return Jwts.builder()
+            .setClaims(claims)
+            .setIssuedAt(now)
+            .setExpiration(validity)
+            .signWith(SignatureAlgorithm.HS256, secretKey)
+            .compact();
+  }
+
+  public String createToken(String username) {
+    return generateToken(username, validity);
+  }
+
+  public String getUsername(String token){
+    return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
+  }
+
+  public Authentication getAuthentication(String token) {
+    UserDetails userDetails = userDetailsService.loadUserByUsername(getUsername(token));
+    return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+  }
+
+  private Claims getAllClaims(String token) {
+    return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
+  }
+
+  public Boolean isTokenExpired(String token) {
+    return getAllClaims(token).getExpiration().before(new Date());
+  }
+
+  public String resolveToken(HttpServletRequest request){
+    String bearer = request.getHeader("Authorization");
+    if (bearer != null && bearer.startsWith("Bearer ")){
+      return bearer.substring(7);
     }
+    return null;
+  }
 
-    protected String generateToken(String subject, Long validityPeriod) {
-        Claims claims = Jwts.claims().setSubject(subject);
-        Date now = new Date();
-        Date validity = new Date(now.getTime() + validityPeriod);
-
-        return Jwts.builder()
-          .setClaims(claims)
-          .setIssuedAt(now)
-          .setExpiration(validity)
-          .signWith(SignatureAlgorithm.HS256, secretKey)
-          .compact();
+  public boolean validateToken(String token){
+    boolean isValid = false;
+    try{
+      Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
+      isValid = true;
+    }catch (JwtException | IllegalArgumentException ex){
+      ex.getMessage();
     }
+    return isValid;
+  }
 
-    public String createToken(String username) {
-        return generateToken(username, validity);
+  public User resolveUser(HttpServletRequest request){
+    String token = this.resolveToken(request);
+    String username = this.getUsername(token);
+    Optional<User> user = userRepository.findByUsername(username);
+    if (user.isPresent()){
+      return user.get();
     }
-
-    public String getUsername(String token){
-        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
-    }
-
-    public Authentication getAuthentication(String token) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(getUsername(token));
-        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
-    }
-
-    private Claims getAllClaims(String token) {
-        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
-    }
-
-    public Boolean isTokenExpired(String token) {
-        return getAllClaims(token).getExpiration().before(new Date());
-    }
-
-    public String resolveToken(HttpServletRequest request){
-        String bearer = request.getHeader("Authorization");
-        if (bearer != null && bearer.startsWith("Bearer ")){
-            return bearer.substring(7);
-        }
-        return null;
-    }
-
-    public boolean validateToken(String token){
-        boolean isValid = false;
-        try{
-            Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
-            isValid = true;
-        }catch (JwtException | IllegalArgumentException ex){
-            ex.getMessage();
-        }
-        return isValid;
-    }
-
-    public User resolveUser(HttpServletRequest request){
-        String token = this.resolveToken(request);
-        String username = this.getUsername(token);
-        Optional<User> user = userRepository.findByUsername(username);
-        if (user.isPresent()){
-            return user.get();
-        }
-        throw new CustomException("User does not exists", HttpStatus.NOT_FOUND);
-    }
+    throw new CustomException("User does not exists", HttpStatus.NOT_FOUND);
+  }
 
 }

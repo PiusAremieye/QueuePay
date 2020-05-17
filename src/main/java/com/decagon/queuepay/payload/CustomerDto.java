@@ -5,8 +5,8 @@ import com.decagon.queuepay.models.transaction.TransactionType;
 
 public class CustomerDto {
 
-    private String customerName;
-    private CardType cardType;
-    private Double amount;
-    private TransactionType transactionType = TransactionType.CREDIT;
+  private String customerName;
+  private CardType cardType;
+  private Double amount;
+  private TransactionType transactionType = TransactionType.CREDIT;
 }
