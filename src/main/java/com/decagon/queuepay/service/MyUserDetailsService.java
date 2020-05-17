@@ -1,8 +1,10 @@
 package com.decagon.queuepay.service;
 
+import com.decagon.queuepay.exceptions.CustomException;
 import com.decagon.queuepay.models.user.User;
 import com.decagon.queuepay.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -23,7 +25,7 @@ public class MyUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Email " + username + " was not found"));
+                .orElseThrow(() -> new CustomException("Email " + username + " was not found", HttpStatus.NOT_FOUND));
     }
 
     @Transactional

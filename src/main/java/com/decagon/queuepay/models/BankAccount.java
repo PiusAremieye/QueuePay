@@ -19,10 +19,6 @@ import java.util.UUID;
 @Data
 public class BankAccount extends AuditModel {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
     @NotNull
     @NotBlank
     private String bankName;

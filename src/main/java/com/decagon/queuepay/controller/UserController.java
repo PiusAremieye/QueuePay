@@ -1,10 +1,10 @@
 package com.decagon.queuepay.controller;
 
-import com.decagon.queuepay.payload.ForgetPasswordRequest;
+import com.decagon.queuepay.apiresponse.ApiResponse;
+import com.decagon.queuepay.models.user.User;
 import com.decagon.queuepay.payload.LoginRequest;
 import com.decagon.queuepay.payload.SignupRequest;
-import com.decagon.queuepay.response.Message;
-import com.decagon.queuepay.exception.Response;
+import com.decagon.queuepay.response.JwtResponse;
 import com.decagon.queuepay.service.MapValidationErrorService;
 import com.decagon.queuepay.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,17 +34,20 @@ public class UserController {
         if (errorMap != null){
             return errorMap;
         }
-        userService.registration(signupRequest);
-        return ResponseEntity.ok(new Message("Registration successful!"));
+        User createdUser = userService.registration(signupRequest);
+        ApiResponse<User> response = new ApiResponse<>(HttpStatus.CREATED);
+        response.setData(createdUser);
+        response.setMessage("Registration successful!");
+        return new ResponseEntity<>(response, response.getStatus());
     }
 
-    @PatchMapping("verifyEmail/{token}")
-    public ResponseEntity<Response<String>> verifyRegistration(@PathVariable String token) throws Exception {
-        userService.verifyRegistration(token);
-        Response<String> response = new Response<>(HttpStatus.ACCEPTED);
-        response.setMessage("You are now a verified user");
-        return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
-    }
+//    @PatchMapping("verifyEmail/{token}")
+//    public ResponseEntity<Response<String>> verifyRegistration(@PathVariable String token) throws Exception {
+//        userService.verifyRegistration(token);
+//        Response<String> response = new Response<>(HttpStatus.ACCEPTED);
+//        response.setMessage("You are now a verified user");
+//        return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
+//    }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody @Valid LoginRequest loginRequest, BindingResult bindingResult) throws Exception {
@@ -52,7 +55,11 @@ public class UserController {
         if (errorMap != null){
             return errorMap;
         }
-       return userService.authenticate(loginRequest);
+        JwtResponse loginResponse = userService.authenticate(loginRequest);
+        ApiResponse<JwtResponse> response = new ApiResponse<>(HttpStatus.OK);
+        response.setData(loginResponse);
+        response.setMessage("Login successful!");
+        return new ResponseEntity<>(response, response.getStatus());
     }
 
 }

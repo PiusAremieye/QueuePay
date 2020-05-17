@@ -23,10 +23,6 @@ import java.util.UUID;
 @Data
 public class Business extends AuditModel {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "userId", nullable = false)
     @JsonIgnore

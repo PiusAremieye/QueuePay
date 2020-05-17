@@ -30,10 +30,6 @@ import java.util.UUID;
 @Data
 public class User extends AuditModel implements UserDetails {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
     @NotBlank(message = "Please name should not be empty")
     private String fullName;
 
@@ -48,36 +44,37 @@ public class User extends AuditModel implements UserDetails {
     @JsonIgnoreProperties
     private String password;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @Fetch(value = FetchMode.SUBSELECT)
-    List<Role> roles;
-
     @JsonIgnore
     private String emailVerificationToken;
 
     @JsonIgnore
     private EmailVerificationStatus emailVerificationStatus = EmailVerificationStatus.UNVERIFIED;
 
+    @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
     }
 
+    @JsonIgnore
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
 
+    @JsonIgnore
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
 
+    @JsonIgnore
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
+    @JsonIgnore
     @Override
     public boolean isEnabled() {
         return true;

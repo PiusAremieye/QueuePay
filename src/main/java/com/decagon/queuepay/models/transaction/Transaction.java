@@ -20,10 +20,6 @@ import javax.validation.constraints.NotNull;
 @Data
 public class Transaction extends AuditModel {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "walletId", nullable = false)
     private Wallet wallet;

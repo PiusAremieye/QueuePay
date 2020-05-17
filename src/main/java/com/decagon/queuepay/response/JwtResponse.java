@@ -1,29 +1,16 @@
 package com.decagon.queuepay.response;
 
-import com.decagon.queuepay.models.user.Role;
-import lombok.AllArgsConstructor;
+import com.decagon.queuepay.payload.SignupRequest;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import java.util.List;
-import java.util.UUID;
+import lombok.EqualsAndHashCode;
 
-@NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 @Data
-public class JwtResponse {
-
+public class JwtResponse extends SignupRequest {
     private String token;
-    private Integer id;
-    private String type = "Bearer";
-    private String email;
-    private String fullName;
-    private String phoneNumber;
 
-    public JwtResponse(String token, Integer id, String email, String fullName, String phoneNumber) {
-        this.token = token;
-        this.id = id;
-        this.email = email;
-        this.fullName = fullName;
-        this.phoneNumber = phoneNumber;
+    public JwtResponse(String fullName, String phoneNumber, String username, String password ) {
+        super(fullName, phoneNumber, username, null);
     }
 
 }
